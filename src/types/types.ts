@@ -2,7 +2,6 @@ export interface ILatLon {
   latitude: number;
   longitude: number;
 }
-
 export interface ILocationISS {
   timestamp?: number;
   iss_position?: ILatLon;

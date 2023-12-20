@@ -5,6 +5,7 @@ import AppHeader from "./components/header/header.tsx";
 import SiderContent from "./components/sider-content/sider-content.tsx";
 import ISSLocationLayout from "./components/ISSLocationLayout/ISSLocationLayout.tsx";
 import { ILocationISS, MyContextType } from "types.ts";
+import { getLocation } from "./app/ISS/location.ts";
 
 import c from "../src/App.module.scss";
 
@@ -13,20 +14,16 @@ const { Sider, Content, Footer } = Layout;
 export const MyContext = createContext<MyContextType | undefined>(undefined);
 
 const App: FC = () => {
-  const [currentISS, setCurrentISS] = useState<ILocationISS | undefined>({});
+  const [currentISS, setCurrentISS] = useState<ILocationISS>();
   const [savedLocations, setSavedLocations] = useState<ILocationISS[]>([]);
-  const [activeISSId, setActiveISSId] = useState<number | undefined>();
+  const [activeISSId, setActiveISSId] = useState<number>();
 
-  const fetchLocation: () => void = async () => {
-    try {
-      const response = await fetch("http://api.open-notify.org/iss-now.json");
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      setCurrentISS(data);
-    } catch (error) {
-      console.log("Error: ", error);
+  const fetchLocation = async () => {
+    const response = await getLocation();
+    if (response.code === "error") {
+      console.log(response.error.message);
+    } else {
+      setCurrentISS(response.data);
     }
   };
 

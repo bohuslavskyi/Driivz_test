@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { JSX, useCallback } from "react";
 import { FloatButton, Typography } from "antd";
 import { AimOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -17,15 +17,13 @@ interface ILayoutProps {
   setActiveISSId: (id: undefined) => void;
 }
 
-const ISSLocationLayout = (props: ILayoutProps): JSX.Element => {
-  const {
-    currentISS,
-    savedLocations,
-    setSavedLocations,
-    activeISSId,
-    setActiveISSId,
-  } = props;
-
+const ISSLocationLayout = ({
+  currentISS,
+  savedLocations,
+  setSavedLocations,
+  activeISSId,
+  setActiveISSId,
+}: ILayoutProps): JSX.Element => {
   const saveLocation = (data: ILocationISS | undefined): void => {
     if (data) {
       const locationIndex = savedLocations.findIndex(
@@ -35,6 +33,12 @@ const ISSLocationLayout = (props: ILayoutProps): JSX.Element => {
 
       setSavedLocations([...savedLocations, data]);
     }
+  };
+
+  const handeClick = (): void => {
+    if (activeISSId) {
+      setActiveISSId(undefined);
+    } else saveLocation(currentISS);
   };
 
   const getLocationById = useCallback(() => {
@@ -59,9 +63,7 @@ const ISSLocationLayout = (props: ILayoutProps): JSX.Element => {
         type={activeISSId ? "default" : "primary"}
         tooltip={activeISSId ? "Current ISS location" : "Save ISS location"}
         style={{ right: 32, bottom: 94 }}
-        onClick={() =>
-          activeISSId ? setActiveISSId(undefined) : saveLocation(currentISS)
-        }
+        onClick={handeClick}
       />
     </>
   );
