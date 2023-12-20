@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, JSX, useMemo, useState } from "react";
 import { Input } from "antd";
 
 import CardItem from "../card-item/card-item.tsx";
@@ -12,9 +12,7 @@ interface IProps {
   savedLocations: ILocationISS[];
 }
 
-const SidetContent = (props: IProps): JSX.Element => {
-  const { savedLocations } = props;
-
+const SidetContent = ({ savedLocations }: IProps): JSX.Element => {
   const [filter, setFilter] = useState<string>("");
   const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
@@ -45,7 +43,7 @@ const SidetContent = (props: IProps): JSX.Element => {
         <h2>{filter ? "Filtered ISS" : "Saved locations"}</h2>
         <div className={c.savedLocationsList}>
           {ISSFilteredList.map((location) => (
-            <CardItem location={location} />
+            <CardItem key={location.timestamp} location={location} />
           ))}
         </div>
       </div>
